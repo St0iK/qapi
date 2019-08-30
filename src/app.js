@@ -7,6 +7,7 @@ const MongoClient = require('mongodb');
 const rateLimit = require('koa2-ratelimit').RateLimit;
 const responseTime = require('./middleware/response-time');
 const count = require('./middleware/count');
+const cache = require('./middleware/redis-cache');
 
 
 // const cache = require('./middleware/redis-cache');
@@ -17,9 +18,11 @@ const errorHandler = require('./middleware/error-handler');
 const quotes = require('./routes/quotes');
 
 // Production read-only DB
-const url = process.env.MONGO_URL || '';
+const url = process.env.MONGO_URL || 'mongodb+srv://readonly:123123123@cluster0-gbjr6.gcp.mongodb.net/test';
 
 const app = new Koa();
+
+app.use(cache());
 
 // Set header with API response time
 app.use(responseTime());
@@ -43,10 +46,10 @@ app.use(cors({
   exposeHeaders: ['quotes-api-cache', 'quotes-api-count', 'quotes-api-response-time'],
 }));
 
-app.use(rateLimit.middleware({
-  interval: 15 * 60 * 1000, // 15 minutes
-  max: 100,
-}));
+// app.use(rateLimit.middleware({
+//   interval: 15 * 60 * 1000, // 15 minutes
+//   max: 100,
+// }));
 
 // Disable Redis caching unless production
 // if (process.env.NODE_ENV === 'production') {
