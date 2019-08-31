@@ -8,7 +8,7 @@ const rateLimit = require('koa2-ratelimit').RateLimit;
 const responseTime = require('./middleware/response-time');
 const count = require('./middleware/count');
 const cache = require('./middleware/redis-cache');
-
+const redisConfig = require('./config/redis');
 
 // const cache = require('./middleware/redis-cache');
 const errorHandler = require('./middleware/error-handler');
@@ -21,8 +21,6 @@ const quotes = require('./routes/quotes');
 const url = process.env.MONGO_URL || 'mongodb+srv://readonly:123123123@cluster0-gbjr6.gcp.mongodb.net/test';
 
 const app = new Koa();
-
-app.use(cache());
 
 // Set header with API response time
 app.use(responseTime());
@@ -55,6 +53,7 @@ app.use(cors({
 // if (process.env.NODE_ENV === 'production') {
 //   app.use(cache(options));
 // }
+app.use(cache(redisConfig));
 
 // Set header with total objects returned
 app.use(count());

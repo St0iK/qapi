@@ -4,14 +4,8 @@
  */
 
 const options = {
-  routes: [{
-    path: '/v2/quotes(.*)',
-    expire: 30,
-  }],
-  passParam: 'pretty',
-  redis: {
-    host: process.env.DOCKER ? 'redis_db' : 'localhost',
-  },
+  host: process.env.DOCKER ? 'redis_db' : 'localhost',
+  port: 6379,
 };
 
 module.exports = options;
