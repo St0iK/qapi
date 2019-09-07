@@ -15,7 +15,7 @@ async function showAvatar() {
     const quotes = await global.db
       .collection('quotes')
       .find({})
-      // .limit(100)
+      .limit(100)
       .sort({ id: 1 })
       .toArray();
 
@@ -62,6 +62,5 @@ async function showAvatar() {
   const value = await showAvatar();
   // insert in chuncks
   console.log('Running');
-  console.log(value[0]);
-  // await global.db.collection('authors').insertMany(value);
+  await global.db.collection('authors').insertMany(value);
 })();
