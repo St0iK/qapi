@@ -2,9 +2,6 @@
 const Redis = require('ioredis');
 
 module.exports = (opts = {}) => {
-
-  // Decostructing the Object & renaming
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Assigning_to_new_variable_names
   const {
     host: redisHost,
     port: redisPort,
@@ -54,6 +51,7 @@ module.exports = (opts = {}) => {
    * @param {Number} cacheExpire
    */
   const cacheContent = async (ctx, key, typeKey, countKey, cacheExpire) => {
+    console.log('Cache Content');
     let { body } = ctx.response;
 
     if ((ctx.request.method !== 'GET') || (ctx.response.status !== 200) || !body) {
@@ -65,6 +63,7 @@ module.exports = (opts = {}) => {
     }
 
     if (typeof body === 'object' && ctx.response.type === 'application/json') {
+      console.log('application/json');
       body = JSON.stringify(body);
       await redis.set(key, body, 'EX', cacheExpire);
     }
@@ -77,14 +76,13 @@ module.exports = (opts = {}) => {
   const getCache = async (ctx, key, tkey, ckey) => {
     const value = await redis.get(key);
     const count = await redis.get(ckey);
-    let type;
     let cached = false;
 
     if (value) {
       ctx.response.status = 200;
       type = (await redis.get(tkey)) || 'text/html';
       ctx.response.set('quotes-api-cache', 'HIT');
-      ctx.response.type = type;
+      ctx.response.type = 'application/json';
       ctx.response.body = value;
       cached = true;
     }

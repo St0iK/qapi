@@ -1,12 +1,9 @@
-// Quote Endpoints
-
 const Router = require('koa-router');
 const authors = require('../controllers/authors');
 
-const app = new Router({
-  prefix: '/authors',
-});
+const app = new Router();
 
-app.get('/', authors.all);
+app.get('/authors', authors.all);
+app.get('/author/:id', authors.one);
 
 module.exports = app;

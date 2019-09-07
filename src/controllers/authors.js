@@ -14,5 +14,11 @@ module.exports = {
       .toArray();
     ctx.body = data;
   },
+  one: async (ctx) => {
+    const data = await global.db
+      .collection('authors')
+      .findOne({ _id: new ObjectId(ctx.params.id) });
+    ctx.body = data;
+  },
 
 };

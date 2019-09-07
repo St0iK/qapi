@@ -1,12 +1,12 @@
-
 const MongoClient = require('mongodb');
 
 const url = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/quotes-parser';
-const toInsertArray = [];
 
-(async () => {
+async function showAvatar() {
+  const toInsertArray = [];
+
   try {
-    console.log(toInsertArray)
+    console.log('Running from inside showAvatar');
     const client = await MongoClient.connect(url, { poolSize: 20, useNewUrlParser: true });
 
     global.db = client.db('quotes-parser');
@@ -15,7 +15,7 @@ const toInsertArray = [];
     const quotes = await global.db
       .collection('quotes')
       .find({})
-      // .limit(10000)
+      // .limit(100)
       .sort({ id: 1 })
       .toArray();
 
@@ -27,20 +27,14 @@ const toInsertArray = [];
       }
     });
 
-    // We have the list of authors, get quotes by author
-    // console.log(authors);
-    
-
-    authors.forEach(async (author) => {
+    for (const author of authors) {
       // For every author get the quotes
+      // eslint-disable-next-line no-await-in-loop
       const authorsQuotes = await global.db
         .collection('quotes')
         .find({ author })
         .sort({ id: 1 })
         .toArray();
-
-      // console.log('Quotes by Author:');
-      // console.log(authorsQuotes);
 
       const quotesByAuthor = [];
       authorsQuotes.forEach((authorsQuote) => {
@@ -51,16 +45,23 @@ const toInsertArray = [];
         author,
         quotes: quotesByAuthor,
       };
-      
       console.log(toInsert);
-
-      await global.db.collection('authors').insertOne(toInsert);
-    });
+      toInsertArray.push(toInsert);
+    }
   } catch (err) {
     console.log(err.stack);
   }
 
-  console.log('Done');
+  return toInsertArray;
+}
 
+// const value = showAvatar();
+// console.log(value.then((l) => { console.log(l); }));
 
+(async () => {
+  const value = await showAvatar();
+  // insert in chuncks
+  console.log('Running');
+  console.log(value[0]);
+  // await global.db.collection('authors').insertMany(value);
 })();

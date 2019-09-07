@@ -16,7 +16,7 @@ const errorHandler = require('./middleware/error-handler');
 
 // route imports
 const quotes = require('./routes/quotes');
-// const authors = require('./routes/authors');
+const authors = require('./routes/authors');
 
 // Production read-only DB
 const url = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/quotes-parser';
@@ -54,7 +54,7 @@ app.use(cors({
 // if (process.env.NODE_ENV === 'production') {
 //   app.use(cache(options));
 // }
-// app.use(cache(redisConfig));
+app.use(cache(redisConfig));
 
 // Set header with total objects returned
 app.use(count());
@@ -65,7 +65,7 @@ app.use(mask({
 }));
 
 app.use(quotes.routes());
-// app.use(authors.routes());
+app.use(authors.routes());
 
 module.exports = app;
 
