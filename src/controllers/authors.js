@@ -6,7 +6,7 @@ module.exports = {
 
   all: async (ctx) => {
     const data = await global.db
-      .collection('quotes')
+      .collection('authors')
       .find({})
       .sort({ id: 1 })
       .limit(limit(ctx.request.query))
