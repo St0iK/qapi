@@ -1,14 +1,12 @@
 
-const Redis = require('ioredis');
+import Redis from 'ioredis';
+import { iConfig } from '../config/redis'
+import * as Koa from 'koa'
 
-module.exports = (opts = {}) => {
-  const {
-    host: redisHost,
-    port: redisPort,
-    redisUrl = `redis://${redisHost}:${redisPort}/`,
-  } = opts;
-
-  let redisAvailable = false;
+export default (opts: iConfig) => {
+  const redisUrl = `redis://${opts.host}:${opts.port}/`;
+  
+  let redisAvailable:boolean = false;
   const redis = new Redis(redisUrl);
   redis.on('error', () => {
     redisAvailable = false;
@@ -20,40 +18,26 @@ module.exports = (opts = {}) => {
     redisAvailable = true;
   });
 
-  /**
-   * @param {*} ctx
-   * @param {*} typeKey
-   * @param {*} cacheExpire
-   */
-  const cacheType = async (ctx, typeKey, cacheExpire) => {
-    const { type } = ctx.response.type;
+  const cacheType = async (ctx: Koa.Context, typeKey:string, cacheExpire: number) => {
+    // Export 'type' from the object that you will get from the response
+    const { type } = ctx.response;
     await redis.set(typeKey, type, 'EX', cacheExpire);
   };
-
-  /**
-   * @param {*} ctx
-   * @param {*} countKey
-   * @param {*} cacheExpire
-   */
-  const cacheCount = async (ctx, countKey, cacheExpire) => {
+  
+  const cacheCount = async (ctx: Koa.Context, countKey: string, cacheExpire: number) => {
+    // Export 'count' from the object that you will get from the response
     const { count } = ctx.state;
     if (count) {
       await redis.set(countKey, count, 'EX', cacheExpire);
     }
   };
 
-  /**
-   * Cache content
-   * @param {Object} ctx
-   * @param {String} key
-   * @param {String} typeKey
-   * @param {String} countKey
-   * @param {Number} cacheExpire
-   */
-  const cacheContent = async (ctx, key, typeKey, countKey, cacheExpire) => {
-    console.log('Cache Content');
+  const cacheContent = async (ctx: Koa.Context, key: string, typeKey: string, countKey: string, cacheExpire: number) => {
+    // Export 'body' from the object that you will get from the response
     let { body } = ctx.response;
 
+    // we only want to cache GET requests
+    // TODO: Move that to config
     if ((ctx.request.method !== 'GET') || (ctx.response.status !== 200) || !body) {
       return;
     }
@@ -63,7 +47,6 @@ module.exports = (opts = {}) => {
     }
 
     if (typeof body === 'object' && ctx.response.type === 'application/json') {
-      console.log('application/json');
       body = JSON.stringify(body);
       await redis.set(key, body, 'EX', cacheExpire);
     }
@@ -73,14 +56,14 @@ module.exports = (opts = {}) => {
     ctx.response.set('quotes-api-cache', 'MISS');
   };
 
-  const getCache = async (ctx, key, tkey, ckey) => {
+  const getCache = async (ctx: Koa.Context, key: string, tkey: string, ckey: string) => {
     const value = await redis.get(key);
     const count = await redis.get(ckey);
     let cached = false;
 
     if (value) {
       ctx.response.status = 200;
-      type = (await redis.get(tkey)) || 'text/html';
+      const type = (await redis.get(tkey)) || 'text/html';
       ctx.response.set('quotes-api-cache', 'HIT');
       ctx.response.type = 'application/json';
       ctx.response.body = value;
@@ -93,33 +76,34 @@ module.exports = (opts = {}) => {
     return cached;
   };
 
-  return async (ctx, next) => {
+  return async (ctx: Koa.Context, next: <Promise>() => any) => {
+    
     const { url } = ctx.request;
     const key = `redis-cache:${url}`;
     const tkey = `${key}:type`;
     const ckey = `${key}:count`;
+
     if (!redisAvailable) {
       return;
     }
 
-    let cached;
+    let cached:string|boolean;
     try {
       cached = await getCache(ctx, key, tkey, ckey);
-      console.log('e');
     } catch (error) {
       console.log(error);
       cached = false;
     }
-    console.log(cached);
+    
     if (cached) {
-      console.log('Content served from redis cache');
       return;
     }
 
     // continue with the rest of the middlewares to build the response
     await next();
-    console.log('Content served from db');
+    
     try {
+      // Add context to the cache
       await cacheContent(ctx, key, tkey, ckey, 10000);
     } catch (e) {
       console.log('Failed to set cache');

@@ -19,6 +19,7 @@
   "author": "Dimitris Stoikidis <jstoikidis@gmail.com>",
   "license": "Apache-2.0",
   "dependencies": {
+    "@types/koa-router": "^7.0.42",
     "cheerio": "^1.0.0-rc.3",
     "gmail-send": "^1.8.10",
     "ioredis": "^4.14.0",
@@ -35,6 +36,7 @@
     "redis": "^2.8.0"
   },
   "devDependencies": {
+    "@types/node": "^12.7.4",
     "@types/redis": "^2.8.13",
     "eslint": "^6.1.0",
     "eslint-config-airbnb": "^17.1.1",

@@ -1,9 +1,6 @@
+import * as Koa from 'koa'
 
-/**
- * Total object count middleware
- * @return {function} Koa Middleware
- */
-module.exports = () => async (ctx, next) => {
+export default async (ctx: Koa.Context, next: () => Promise<any>) => {
   await next();
   if (ctx.state.data) {
     const count = await ctx.state.data.count(false);

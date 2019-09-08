@@ -1,17 +1,18 @@
-const cors = require('koa2-cors');
-const helmet = require('koa-helmet');
-const Koa = require('koa');
-const logger = require('koa-morgan');
-const mask = require('koa-json-mask');
-const MongoClient = require('mongodb');
-const rateLimit = require('koa2-ratelimit').RateLimit;
-const responseTime = require('./middleware/response-time');
-const count = require('./middleware/count');
-const cache = require('./middleware/redis-cache');
-const redisConfig = require('./config/redis');
+const globalAny:any = global;
+import * as cors from 'koa2-cors';
+import helmet from 'koa-helmet';
+import Koa from 'koa';
+import logger from 'koa-morgan';
+import mask from 'koa-json-mask';
+import MongoClient from 'mongodb';
+// const rateLimit = require('koa2-ratelimit').RateLimit;
+import responseTime from './middleware/response-time';
+import count from './middleware/count';
+import cache from './middleware/redis-cache';
+import { config } from './config/redis';
 
 // const cache = require('./middleware/redis-cache');
-const errorHandler = require('./middleware/error-handler');
+import errorHandler from './middleware/error-handler';
 // const options = require('./config/redis');
 
 // route imports
@@ -24,7 +25,7 @@ const url = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/quotes-parser';
 const app = new Koa();
 
 // Set header with API response time
-app.use(responseTime());
+app.use(responseTime);
 
 // HTTP header security
 app.use(helmet());
@@ -35,7 +36,7 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 // Error Handler
-app.use(errorHandler());
+app.use(errorHandler);
 
 // Enable CORS for all routes
 app.use(cors({
@@ -54,10 +55,10 @@ app.use(cors({
 // if (process.env.NODE_ENV === 'production') {
 //   app.use(cache(options));
 // }
-app.use(cache(redisConfig));
+app.use(cache(config));
 
 // Set header with total objects returned
-app.use(count());
+app.use(count);
 
 // Allow user to restrict the keys returned
 app.use(mask({
@@ -77,10 +78,11 @@ console.log('1');
     console.log('2');
     const client = await MongoClient.connect(url, { poolSize: 20, useNewUrlParser: true });
 
-    global.db = client.db('quotes-parser');
+    globalAny.db = client.db('quotes-parser');
 
-    const port = process.env.PORT || 5000;
-    app.listen(port, '0.0.0.0', () => {
+    const port = parseInt(process.env.PORT) || 5000;
+    const hostname = '127.0.0.1';
+    app.listen(port, hostname, () => {
       app.emit('ready');
       console.log('Running on port 5000');
     });

@@ -1,9 +1,6 @@
+import * as Koa from 'koa'
 
-/**
- * Error handler middleware
- * @return {function} Koa Middleware
- */
-module.exports = () => async (ctx, next) => {
+export default async (ctx: Koa.Context, next: () => Promise<any>) => {
   try {
     await next();
   } catch (err) {
