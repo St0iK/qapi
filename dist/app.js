@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const globalAny = global;
+const koa2_cors_1 = __importDefault(require("koa2-cors"));
 const koa_helmet_1 = __importDefault(require("koa-helmet"));
 const koa_1 = __importDefault(require("koa"));
 const koa_morgan_1 = __importDefault(require("koa-morgan"));
@@ -43,12 +44,12 @@ if (process.env.NODE_ENV !== 'test') {
 // Error Handler
 app.use(error_handler_1.default);
 // Enable CORS for all routes
-// app.use(cors({
-//   origin: '*',
-//   allowMethods: ['GET'],
-//   allowHeaders: ['Content-Type', 'Accept'],
-//   exposeHeaders: ['quotes-api-cache', 'quotes-api-count', 'quotes-api-response-time'],
-// }));
+app.use(koa2_cors_1.default({
+    origin: '*',
+    allowMethods: ['GET'],
+    allowHeaders: ['Content-Type', 'Accept'],
+    exposeHeaders: ['quotes-api-cache', 'quotes-api-count', 'quotes-api-response-time'],
+}));
 // app.use(rateLimit.middleware({
 //   interval: 15 * 60 * 1000, // 15 minutes
 //   max: 100,

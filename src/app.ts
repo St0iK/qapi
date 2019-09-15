@@ -1,5 +1,5 @@
 const globalAny:any = global;
-import * as cors from 'koa2-cors';
+import cors from 'koa2-cors';
 import helmet from 'koa-helmet';
 import Koa from 'koa';
 import logger from 'koa-morgan';
@@ -39,12 +39,12 @@ if (process.env.NODE_ENV !== 'test') {
 app.use(errorHandler);
 
 // Enable CORS for all routes
-// app.use(cors({
-//   origin: '*',
-//   allowMethods: ['GET'],
-//   allowHeaders: ['Content-Type', 'Accept'],
-//   exposeHeaders: ['quotes-api-cache', 'quotes-api-count', 'quotes-api-response-time'],
-// }));
+app.use(cors({
+  origin: '*',
+  allowMethods: ['GET'],
+  allowHeaders: ['Content-Type', 'Accept'],
+  exposeHeaders: ['quotes-api-cache', 'quotes-api-count', 'quotes-api-response-time'],
+}));
 
 // app.use(rateLimit.middleware({
 //   interval: 15 * 60 * 1000, // 15 minutes
@@ -71,7 +71,6 @@ app.use(authors.routes());
 module.exports = app;
 
 // Mongo Connection + Server Start
-console.log('1');
 
 (async () => {
   try {
@@ -84,12 +83,10 @@ console.log('1');
     const hostname = '127.0.0.1';
     app.listen(port, hostname, () => {
       app.emit('ready');
-      console.log('Running on port 5000');
+      console.log(port);
     });
   } catch (err) {
     console.log(err.stack);
   }
-  console.log('3');
-})();
 
-console.log('4');
+})();

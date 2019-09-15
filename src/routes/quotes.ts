@@ -1,5 +1,5 @@
-const Router = require('koa-router');
-const quotes = require('../controllers/quotes');
+import Router from 'koa-router'
+import quotes from '../controllers/quotes';
 
 const app = new Router();
 
