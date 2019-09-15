@@ -7,7 +7,7 @@ async function startServer() {
   await require('./loaders').default({ koaApp: app });
 
   try {
-    Logger.info('🇬🇷');
+
     const port:number = parseInt(process.env.PORT) || 5000;
     const hostname:string = '127.0.0.1';
 

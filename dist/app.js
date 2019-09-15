@@ -65,8 +65,8 @@ app.use(count_1.default);
 app.use(koa_json_mask_1.default({
     name: 'filter',
 }));
-app.use(quotes_1.default.routes());
-app.use(authors_1.default.routes());
+app.use(quotes_1.default);
+app.use(authors_1.default);
 module.exports = app;
 // Mongo Connection + Server Start
 (() => __awaiter(void 0, void 0, void 0, function* () {

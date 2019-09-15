@@ -65,8 +65,8 @@ app.use(mask({
   name: 'filter',
 }));
 
-app.use(quotes.routes());
-app.use(authors.routes());
+app.use(quotes);
+app.use(authors);
 
 module.exports = app;
 

@@ -8,8 +8,7 @@ import count from '../middleware/count';
 import cache from '../middleware/redis-cache';
 import { config } from '../config/redis';
 import errorHandler from '../middleware/error-handler';
-import quotes from '../routes/quotes';
-import authors from '../routes/authors';
+import routes from '../routes';
 
 export default ({ app }: { app: Koa }) => {
 
@@ -45,6 +44,6 @@ export default ({ app }: { app: Koa }) => {
     name: 'filter',
   }));
 
-  app.use(quotes.routes());
-  app.use(authors.routes());
+  // Build routes
+  routes(app);
 }

@@ -6,4 +6,4 @@ const app = new Router();
 app.get('/quotes', quotes.all);
 app.get('/quote/:id', quotes.one);
 
-export default app;
+export default app.routes();
