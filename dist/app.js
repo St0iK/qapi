@@ -69,7 +69,6 @@ app.use(quotes_1.default.routes());
 app.use(authors_1.default.routes());
 module.exports = app;
 // Mongo Connection + Server Start
-console.log('1');
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log('2');
@@ -79,12 +78,10 @@ console.log('1');
         const hostname = '127.0.0.1';
         app.listen(port, hostname, () => {
             app.emit('ready');
-            console.log('Running on port 5000');
+            console.log(port);
         });
     }
     catch (err) {
         console.log(err.stack);
     }
-    console.log('3');
 }))();
-console.log('4');
