@@ -5,9 +5,7 @@ export interface iConfig {
   redisUrl?: string
 }
 
-const config = {
+export const config = {
   host: process.env.DOCKER ? 'redis_db' : 'localhost',
   port: 6379
 };
-
-export { config };

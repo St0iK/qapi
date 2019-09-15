@@ -16,8 +16,8 @@ import errorHandler from './middleware/error-handler';
 // const options = require('./config/redis');
 
 // route imports
-const quotes = require('./routes/quotes');
-const authors = require('./routes/authors');
+import quotes from './routes/quotes';
+import authors from './routes/authors';
 
 // Production read-only DB
 const url = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/quotes-parser';
@@ -39,12 +39,12 @@ if (process.env.NODE_ENV !== 'test') {
 app.use(errorHandler);
 
 // Enable CORS for all routes
-app.use(cors({
-  origin: '*',
-  allowMethods: ['GET'],
-  allowHeaders: ['Content-Type', 'Accept'],
-  exposeHeaders: ['quotes-api-cache', 'quotes-api-count', 'quotes-api-response-time'],
-}));
+// app.use(cors({
+//   origin: '*',
+//   allowMethods: ['GET'],
+//   allowHeaders: ['Content-Type', 'Accept'],
+//   exposeHeaders: ['quotes-api-cache', 'quotes-api-count', 'quotes-api-response-time'],
+// }));
 
 // app.use(rateLimit.middleware({
 //   interval: 15 * 60 * 1000, // 15 minutes

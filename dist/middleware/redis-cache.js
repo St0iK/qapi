@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ioredis_1 = __importDefault(require("ioredis"));
-exports.default = (opts = {}) => {
+exports.default = (opts) => {
     const redisUrl = `redis://${opts.host}:${opts.port}/`;
     let redisAvailable = false;
     const redis = new ioredis_1.default(redisUrl);
@@ -26,21 +26,11 @@ exports.default = (opts = {}) => {
     redis.on('connect', () => {
         redisAvailable = true;
     });
-    /**
-     * @param {*} ctx
-     * @param {*} typeKey
-     * @param {*} cacheExpire
-     */
     const cacheType = (ctx, typeKey, cacheExpire) => __awaiter(void 0, void 0, void 0, function* () {
         // Export 'type' from the object that you will get from the response
         const { type } = ctx.response;
         yield redis.set(typeKey, type, 'EX', cacheExpire);
     });
-    /**
-     * @param {*} ctx
-     * @param {*} countKey
-     * @param {*} cacheExpire
-     */
     const cacheCount = (ctx, countKey, cacheExpire) => __awaiter(void 0, void 0, void 0, function* () {
         // Export 'count' from the object that you will get from the response
         const { count } = ctx.state;
@@ -51,6 +41,8 @@ exports.default = (opts = {}) => {
     const cacheContent = (ctx, key, typeKey, countKey, cacheExpire) => __awaiter(void 0, void 0, void 0, function* () {
         // Export 'body' from the object that you will get from the response
         let { body } = ctx.response;
+        // we only want to cache GET requests
+        // TODO: Move that to config
         if ((ctx.request.method !== 'GET') || (ctx.response.status !== 200) || !body) {
             return;
         }
@@ -58,7 +50,6 @@ exports.default = (opts = {}) => {
             yield redis.set(key, body, 'EX', cacheExpire);
         }
         if (typeof body === 'object' && ctx.response.type === 'application/json') {
-            console.log('application/json');
             body = JSON.stringify(body);
             yield redis.set(key, body, 'EX', cacheExpire);
         }
@@ -104,8 +95,8 @@ exports.default = (opts = {}) => {
         }
         // continue with the rest of the middlewares to build the response
         yield next();
-        console.log('Content served from db');
         try {
+            // Add context to the cache
             yield cacheContent(ctx, key, tkey, ckey, 10000);
         }
         catch (e) {

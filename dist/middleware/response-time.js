@@ -10,8 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = (ctx, next) => __awaiter(void 0, void 0, void 0, function* () {
+    // get current timestamp
     const start = Date.now();
+    // continue with the rest of the middlewares to build request
     yield next();
+    // when they are all finsihed, calculate the difference
     const ms = Date.now() - start;
     ctx.set('quotes-api-response-time', `${ms}ms`);
 });
