@@ -1,6 +1,5 @@
-import * as Koa from 'koa'
 
-const maxResults:number = 1000;
+const maxResults:number = 100;
 
 export default (q:any) => {
   if (q.limit) {

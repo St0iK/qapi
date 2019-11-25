@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ioredis_1 = __importDefault(require("ioredis"));
 exports.default = (opts) => {
+    console.log("Not being loaded");
     const redisUrl = `redis://${opts.host}:${opts.port}/`;
     let redisAvailable = false;
     const redis = new ioredis_1.default(redisUrl);

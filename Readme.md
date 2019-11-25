@@ -2,8 +2,7 @@
 
 <h2>ToDo List:</h2>
 <ul>
-<li>Use ENV Variables for MongoDB & Redis</li>
-<li>Build script to categorise authors</li>
-<li>Move app to the cloud</li>
-<li>Implement Image service</li>
+<li>Fix script to insert content in chuncks</li>
+<li>Move to the cloud</li>
+<li>Implement Quote Insert/Update & Dependency Injection</li>
 </ul>

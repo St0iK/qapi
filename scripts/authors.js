@@ -28,7 +28,7 @@ async function showAvatar() {
     });
 
     for (const author of authors) {
-      // For every author get the quotes
+      // For every Author.ts get the quotes
       // eslint-disable-next-line no-await-in-loop
       const authorsQuotes = await global.db
         .collection('quotes')

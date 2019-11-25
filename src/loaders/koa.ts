@@ -9,6 +9,7 @@ import cache from '../middleware/redis-cache';
 import { config } from '../config/redis';
 import errorHandler from '../middleware/error-handler';
 import routes from '../routes';
+import Logger from './logger';
 
 export default ({ app }: { app: Koa }) => {
 
@@ -34,7 +35,8 @@ export default ({ app }: { app: Koa }) => {
     exposeHeaders: ['quotes-api-cache', 'quotes-api-count', 'quotes-api-response-time'],
   }));
 
-  app.use(cache(config));
+  // Disable cache on Development properly
+  // app.use(cache(config));
 
   // Set header with total objects returned
   app.use(count);

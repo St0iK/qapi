@@ -4,5 +4,5 @@ export default (q) => {
     return parseInt(q.offset, 10);
   } 
 
-  return null;
+  return 0;
 };

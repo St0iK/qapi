@@ -4,6 +4,7 @@ import { iConfig } from '../config/redis'
 import * as Koa from 'koa'
 
 export default (opts: iConfig) => {
+  console.log("Not being loaded");
   const redisUrl = `redis://${opts.host}:${opts.port}/`;
   
   let redisAvailable:boolean = false;
