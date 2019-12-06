@@ -6,7 +6,8 @@
   "scripts": {
     "test": "eslint . && NODE_ENV=test PORT=0 jest --silent --verbose",
     "start": "node src/app.js",
-    "dev": "nodemon node src/app.js",
+    "dev": "nodemon src/app_refactored.ts",
+    "dev:debug": "nodemon --inspect src/app_refactored.ts",
     "pkg": "pkg src/app.js --output quotes-api",
     "lint": "eslint ."
   },
@@ -37,6 +38,7 @@
     "mongoose": "^5.7.7",
     "path-to-regexp": "^3.0.0",
     "redis": "^2.8.0",
+    "typescript": "^3.7.3",
     "winston": "^3.2.1"
   },
   "devDependencies": {
@@ -53,7 +55,8 @@
     "jest": "^24.8.0",
     "nodemon": "^1.19.1",
     "pkg": "^4.4.0",
-    "supertest": "^4.0.2"
+    "supertest": "^4.0.2",
+    "ts-node": "^8.5.4"
   },
   "jest": {
     "setupFilesAfterEnv": [

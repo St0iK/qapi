@@ -14,8 +14,7 @@ export default {
       .limit(limit(ctx.request.query))
       .skip(offset(ctx.request.query))
       .exec();
-
-    console.log(data);
+    
     ctx.body = data;
   },
 
