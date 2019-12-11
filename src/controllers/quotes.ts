@@ -2,31 +2,51 @@ import * as Koa from 'koa'
 import * as mongodb from 'mongodb';
 import limit from '../lib/query-builder/limit'
 import offset from '../lib/query-builder/offset'
-import Quote, { IQuote } from '../models/quote';
-
+import Quote from '../models/quote';
 
 export default {
 
   all: async (ctx: Koa.Context): Promise<any> => {
-    const data:IQuote[] = await Quote
+    ctx.body = await Quote
       .find({})
-      .sort({ id: 1 })
+      .sort({id: 1})
       .limit(limit(ctx.request.query))
       .skip(offset(ctx.request.query))
       .exec();
-    
-    ctx.body = data;
   },
 
   one: async (ctx: Koa.Context): Promise<any> => {
-    console.log(ctx.params.id);
-    const data = await Quote.findOne({ _id: new mongodb.ObjectID(ctx.params.id) }).exec();
-    console.log(data);
-    ctx.body = data;
+    ctx.body = await Quote.findOne({_id: new mongodb.ObjectID(ctx.params.id)}).exec();
   },
 
   create: async (ctx: Koa.Context): Promise<any> => {
-    // get request body data
-    ctx.body = 'Hello World';
+
+    try {
+      const quote = new Quote(ctx.request.body);
+      const existingQuote = await Quote.findOne({'quote': quote.quote}).exec();
+
+      if (!existingQuote) {
+        ctx.body = await quote.save();
+        return;
+      }
+
+      ctx.body = {status: 'error', message: `Quote already exists.`}
+
+    } catch (error) {
+      ctx.status = error.status || 500;
+      ctx.body = error.message;
+    }
+  },
+
+  update: async (ctx: Koa.Context): Promise<any> => {
+    try {
+      ctx.body = await Quote.findOneAndUpdate({
+          _id: ctx.params.quoteId
+        }, ctx.request.body, {new: true}
+      );
+    } catch (error) {
+      ctx.status = error.status || 500;
+      ctx.body = error.message;
+    }
   },
 };

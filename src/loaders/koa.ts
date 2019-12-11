@@ -2,6 +2,7 @@ import cors from 'koa2-cors';
 import helmet from 'koa-helmet';
 import Koa from 'koa';
 import logger from 'koa-morgan';
+import koaBody from 'koa-body';
 import mask from 'koa-json-mask';
 import responseTime from '../middleware/response-time';
 import count from '../middleware/count';
@@ -9,12 +10,13 @@ import cache from '../middleware/redis-cache';
 import { config } from '../config/redis';
 import errorHandler from '../middleware/error-handler';
 import routes from '../routes';
-import Logger from './logger';
 
 export default ({ app }: { app: Koa }) => {
 
   // Set header with API response time
   app.use(responseTime);
+
+  app.use(koaBody());
 
   // HTTP header security
   app.use(helmet());

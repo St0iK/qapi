@@ -1,1 +1,0 @@
-import Quotes from '../src/models/quotes'

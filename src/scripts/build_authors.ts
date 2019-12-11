@@ -8,12 +8,11 @@ async function getAllQuotes(): Promise<IQuote[]> {
 }
 
 
-async function process() { 
+async function process() {
     
     await dbLoader();
 
     const allQuotes = await getAllQuotes();
-    
 
     const authors = [];
     allQuotes.forEach((quote:IQuote) => {
@@ -22,13 +21,9 @@ async function process() {
         }
     });
 
-    Author.insertMany(authors);
+    await Author.insertMany(authors);
 
-    Logger.info(`
-    ################################################
-     ✅                 DONE                     ✅
-    ################################################
-  `);
+    Logger.info(`Done ✅`);
 }
 
 process();

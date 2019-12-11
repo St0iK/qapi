@@ -6,8 +6,8 @@
   "scripts": {
     "test": "eslint . && NODE_ENV=test PORT=0 jest --silent --verbose",
     "start": "node src/app.js",
-    "dev": "nodemon src/app_refactored.ts",
-    "dev:debug": "nodemon --inspect src/app_refactored.ts",
+    "dev": "nodemon src/app.ts",
+    "dev:debug": "nodemon --inspect src/app.ts",
     "pkg": "pkg src/app.js --output quotes-api",
     "lint": "eslint ."
   },
@@ -27,6 +27,8 @@
     "gmail-send": "^1.8.10",
     "ioredis": "^4.14.0",
     "koa": "^2.7.0",
+    "koa-body": "^4.1.1",
+    "koa-bodyparser": "^4.2.1",
     "koa-helmet": "^5.1.0",
     "koa-is-json": "^1.0.0",
     "koa-json-mask": "^1.0.0",
