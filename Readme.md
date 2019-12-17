@@ -1,4 +1,4 @@
-# Quotable
+# QAPI
 
 _A REST API for famous quotes_
 
