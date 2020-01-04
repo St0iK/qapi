@@ -9,6 +9,9 @@
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "esModuleInterop": true,
+      "types": [
+        "koa-body"
+      ]
     },
     "include": ["./src/**/*"]
   }

@@ -1,4 +1,3 @@
-
 import Redis from 'ioredis';
 import { iConfig } from '../config/redis'
 import * as Koa from 'koa'
