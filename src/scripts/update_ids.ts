@@ -1,5 +1,5 @@
-import Quote, {IQuote} from '../models/quote';
-import Author, {IAuthor} from '../models/author';
+import Quote, { IQuote } from '../models/quote';
+import Author, { IAuthor } from '../models/author';
 import dbLoader from '../loaders/db';
 import Logger from '../loaders/logger';
 
