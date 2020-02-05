@@ -46,7 +46,6 @@
   "devDependencies": {
     "@types/node": "^12.12.26",
     "@types/redis": "^2.8.14",
-    "eslint": "^6.8.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-plugin-import": "^2.20.0",
     "eslint-plugin-jest": "^22.21.0",

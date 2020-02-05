@@ -92,3 +92,27 @@ TODO.md
 test.json
 .vscode
 dist/
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+admin/node_modules
+admin/.pnp
+admin/.pnp.js
+
+# testing
+admin/coverage
+
+# production
+admin/build
+
+# misc
+admin/.DS_Store
+admin/.env.local
+admin/.env.development.local
+admin/.env.test.local
+admin/.env.production.local
+
+admin/npm-debug.log*
+admin/yarn-debug.log*
+admin/yarn-error.log*
